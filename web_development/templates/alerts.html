@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}경고 내역 | ThermoGuard{% endblock %}
+{% block heading %}경고 발생 내역{% endblock %}
+{% block content %}
+<section class="page-intro"><p>과열과 화재 위험 감지 기록을 시간순으로 확인합니다.</p></section>
+<article class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>상태</th><th>발생 시각</th><th>카메라</th><th>구역</th><th>최고 온도</th><th>메시지</th><th>처리</th></tr></thead><tbody>
+{% for alert in alerts %}<tr><td><span class="status-badge {{ alert.level }}">{{ '위험' if alert.level == 'danger' else '주의' }}</span></td><td>{{ alert.occurred_at.replace('T', ' ') }}</td><td><a href="{{ url_for('camera_detail', camera_id=alert.camera_id) }}">{{ alert.camera_id }}</a></td><td>{{ alert.location }}</td><td class="temp-value">{{ '%.1f'|format(alert.max_temperature) }}°C</td><td>{{ alert.message }}</td><td>{% if alert.acknowledged %}<span class="done">✓ {{ alert.acknowledged_name }}</span>{% elif g.user.role == 'admin' %}<form method="post" action="{{ url_for('acknowledge_alert', alert_id=alert.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="small-button">확인 처리</button></form>{% else %}<span class="pending">미확인</span>{% endif %}</td></tr>{% else %}<tr><td colspan="7" class="empty-state">아직 발생한 경고가 없습니다.</td></tr>{% endfor %}
+</tbody></table></div></article>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}사용자 관리 | ThermoGuard{% endblock %}
+{% block heading %}사용자 관리{% endblock %}
+{% block content %}
+<section class="page-intro"><p>관제 시스템에 접근할 사용자와 권한을 관리합니다.</p></section>
+<section class="users-layout">
+  <form class="panel user-form" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><div class="panel-heading"><div><p class="eyebrow">NEW USER</p><h2>사용자 추가</h2></div></div><label>아이디<input name="username" minlength="3" required placeholder="3자 이상"></label><label>표시 이름<input name="display_name" required placeholder="예: 홍길동"></label><label>초기 비밀번호<input type="password" name="password" minlength="8" required placeholder="8자 이상"></label><label>권한<select name="role"><option value="member">일반 회원</option><option value="admin">관리자</option></select></label><button class="primary-button full">사용자 추가</button></form>
+  <article class="panel table-panel"><div class="panel-heading"><div><p class="eyebrow">USER LIST</p><h2>등록 사용자</h2></div></div><div class="table-wrap"><table><thead><tr><th>사용자</th><th>아이디</th><th>권한</th><th>상태</th><th>관리</th></tr></thead><tbody>{% for user in users %}<tr><td><strong>{{ user.display_name }}</strong></td><td>{{ user.username }}</td><td><span class="role-badge">{{ '관리자' if user.role == 'admin' else '일반 회원' }}</span></td><td><span class="{{ 'done' if user.active else 'pending' }}">● {{ '활성' if user.active else '비활성' }}</span></td><td><form method="post" action="{{ url_for('toggle_user', user_id=user.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="small-button" {% if user.id == g.user.id %}disabled{% endif %}>{{ '비활성화' if user.active else '활성화' }}</button></form></td></tr>{% endfor %}</tbody></table></div></article>
+</section>
+{% endblock %}

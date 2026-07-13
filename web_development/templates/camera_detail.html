@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{{ camera.camera_id }} | ThermoGuard{% endblock %}
+{% block heading %}{{ camera.name }}{% endblock %}
+{% block content %}
+<section class="page-intro"><p>{{ camera.camera_id }} · {{ camera.location }}</p><a class="secondary-button" href="{{ url_for('cameras') }}">← 카메라 목록</a></section>
+<section class="detail-grid" data-camera-id="{{ camera.camera_id }}">
+  <article class="panel thermal-detail"><div class="panel-heading"><div><p class="eyebrow">LIVE THERMAL VIEW / ROBOT_01</p><h2>로봇팔·모터 실시간 열화상</h2></div><span id="detailStatus" class="status-badge">연결 중</span></div><div class="detail-image-stage"><img class="robot-thermal-image" src="{{ url_for('static', filename='images/robot-arm-thermal.png') }}" alt="로봇팔과 모터의 열화상 촬영 화면"><div id="detailHotspots" class="hotspot-layer"></div></div><div class="thermal-scale"><span>20°C</span><i></i><span>100°C</span></div></article>
+  <aside class="detail-side">
+    <article class="panel temperature-reading"><small>최고 온도</small><strong><span id="detailMax">-</span>°C</strong><p>임계값과 비교한 현재 최고값</p></article>
+    <article class="panel mini-readings"><div><small>현재</small><strong><span id="detailCurrent">-</span>°C</strong></div><div><small>평균</small><strong><span id="detailAverage">-</span>°C</strong></div></article>
+    <article class="panel connection-info"><p><span>카메라 ID</span><strong>{{ camera.camera_id }}</strong></p><p><span>설치 구역</span><strong>{{ camera.location }}</strong></p><p><span>연결 상태</span><strong class="connected">● 온라인</strong></p><p><span>마지막 수신</span><strong id="detailTime">-</strong></p></article>
+  </aside>
+</section>
+<article class="panel"><div class="panel-heading"><div><p class="eyebrow">CAMERA HISTORY</p><h2>카메라 온도 이력</h2></div></div><canvas id="detailChart" height="240"></canvas></article>
+{% endblock %}

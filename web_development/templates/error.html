@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% block title %}오류 {{ code }} | ThermoGuard{% endblock %}
+{% block heading %}요청을 처리할 수 없습니다{% endblock %}
+{% block content %}<section class="panel error-page"><strong>{{ code }}</strong><h2>{{ message }}</h2><a class="primary-button" href="{{ url_for('dashboard') }}">대시보드로 이동</a></section>{% endblock %}
